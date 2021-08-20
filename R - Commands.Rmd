@@ -1,0 +1,784 @@
+---
+title: "EXPLORATORY DATA ANALYSIS - LA1"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. 
+
+Reading Bigger Data Files using read.csv() Command.
+
+```{r}
+data = read.csv(file.choose())
+head(data)
+```
+```{r}
+df1 = data
+df1[is.na(df1)] = 0
+head(df1)
+```
+
+
+Viewing Previously Loaded Named-Objects.
+
+```{r}
+ls()
+ls(pattern = 'da')
+ls(pattern = 'p')
+```
+
+The str() command to examine the structure of an object.
+
+```{r}
+str(data)
+str(data)
+str(data$Hardness)
+structure(head(data))
+ls.str(pattern = 'data')
+
+attach(head(df1))
+stack(head(data))
+stack(head(df1))
+
+```
+
+The class() command to know the type of object.
+
+```{r}
+class(data)
+class(dimnames(data))
+class(data$ph)
+class(data$Sulfate)
+```
+
+Selecting and Displaying Parts of a Object.
+
+```{r}
+data[1003,7]
+data[777,1:5]
+head(data[1])
+head(data[1:4])
+head(data[-1])
+head(data[data > 7])
+head(data[data < 5 | data > 10], n = 10)
+
+which(data == max(data))
+```
+
+Sorting and Rearranging a Object.
+
+```{r}
+sort(head(data$Hardness))
+sort(head(data$Hardness), decreasing = TRUE)
+sort(head(data$Hardness), na.last = NA)
+sort(head(data$Hardness), na.last = TRUE)
+sort(head(data$Hardness), na.last = FALSE)
+
+order(head(data$Hardness))
+
+rank(head(data))
+rank(head(data$Hardness))
+```
+
+Viewing Objects within Objects.
+
+```{r}
+head(data$ph)
+head(data$Conductivity)
+data$Chloramines[1:4]
+```
+
+Use of head() and tail() command. 
+
+```{r}
+head(data)
+head(data, n = 7)
+
+tail(data)
+```
+
+Getting information of an Object using summary() command.
+
+```{r}
+summary(data)
+```
+
+Use of names() and dimnames() command to view the column and row elements of an Object.
+
+```{r}
+names(data)
+
+rownames(head(data))
+colnames(head(data))
+
+dimnames(data)
+dimnames(data)[[1]]
+dimnames(data)[[2]]
+
+```
+
+Rotating Data Tables using t() command.
+
+```{r}
+data.t = t(data)
+```
+
+Use of cbind() and rbind() command to form columns and rows of a matrix.
+
+```{r}
+data.mat = as.matrix(data)
+data.mat
+
+cbind(head(data.mat))
+rbind(head(data.mat))
+```
+
+Summarizing samples: 
+
+```{r}
+mean(data$Hardness)
+mean(data[,2])
+mean(data[2,])
+
+median(data$Hardness)
+mad(data$Hardness, na.rm = FALSE)
+
+mode(data$Hardness)
+
+var(data$Hardness)
+sd(data$Hardness)
+
+max(data$ph)
+max(data$Hardness)
+min(data$Hardness)
+
+length(data)
+
+sum(is.na(data))
+
+quantile(data$Hardness)
+
+fivenum(data$Hardness)
+```
+
+Cumulative statistics:
+
+```{r}
+cumsum(head(data$Hardness))
+
+cummax(head(data$Hardness))
+
+cummin(head(data$Hardness))
+
+cumprod(head(data$Hardness))
+
+seq_along(data)
+
+seq(from = 1, to = 4, by =1)
+
+cumsum(head(data$Hardness)) / seq_along(data)
+
+d = seq_along(data)
+d
+```
+
+Summarizing rows and columns:
+
+```{r}
+rowMeans(head(data))
+
+rowSums(head(data))
+
+colMeans(data)
+
+colSums(data)
+
+apply(head(data), 1, mean, na.rm = TRUE)
+apply(head(data), 1, median, na.rm = TRUE)
+apply(data, 1, median)[1:2]
+
+lapply(head(data), mean, na.rm = TRUE)
+lapply(head(data), median, na.rm = TRUE)
+
+sapply(head(data), mean, na.rm = TRUE)
+```
+
+Contingency tables and cross tabulation:
+
+```{r}
+table(head(data$Hardness))
+table(head(data$ph),head(data$Hardness))
+
+d = data[which(head(data$Hardness) == 7),]
+d
+```
+
+Table summaries:
+
+```{r}
+prop.table(head(data))
+
+addmargins(head(data), 1, mean)
+addmargins(head(data), 2, median)
+```
+
+Testing table objects:
+
+```{r}
+is.table(head(data))
+```
+
+Reading data objects:
+
+```{r}
+with(head(data), table(ph, Hardness))
+with(data, sum(Chloramines))
+```
+
+Drawing distribution and Graphics:
+
+```{r}
+stem(data$Hardness)
+stem(data$Hardness, scale = 2)
+stem(data$Solids)
+
+hist(data$Hardness)
+hist(data$Hardness, breaks = 'Sturges')
+hist(data$Hardness, breaks = 'Scott')
+hist(data$Hardness, breaks = 'FD')
+hist(data$Hardness, breaks = 'st')
+hist(data$Hardness, breaks = 10)
+hist(data$Hardness, col = 'gray', main = NULL, xlab = 'Size', ylim = c(0, 0.1), freq = FALSE)
+
+hist(data$Solids, col = 'brown', border = 'white')
+hist(data$Chloramines, col = 'red', border = 'black')
+hist(data$Sulfate, col = 'lightblue', border = 'white')
+hist(data$Conductivity, col = 'lightgreen', border = 'white')
+hist(data$Organic_carbon, col = 'black', border = 'yellow')
+hist(data$Trihalomethanes, col = 'pink')
+hist(data$Turbidity, col = 'magenta')
+hist(data$Potability, col = 'cyan')
+hist(data$ph, col = 'green', border = 'white')
+
+density = density(data$Hardness)
+density
+
+dens1 = density(data$Chloramines)
+dens1
+
+dens2 = density(data$Solids)
+dens2
+
+plot(data)
+plot(data$ph)
+plot(data$Solids)
+plot(data$Chloramines)
+plot(data$Sulfate)
+plot(data$Conductivity)
+plot(data$Organic_carbon)
+plot(data$Trihalomethanes)
+plot(data$Turbidity)
+plot(data$Potability)
+plot(data$Hardness)
+plot(density(df1$Hardness))
+plot(density(df1$Hardness), main = "", xlab = 'Size bin classes')
+
+df1 = data
+df1[is.na(df1)] = 0
+head(df1)
+
+sum(is.na(df1))
+
+View(head(df1))
+nrow(head(df1))
+nrow(df1)
+ncol(df1)
+
+hist(df1$Hardness, freq = F, col = 'blue')
+lines(density(df1$Hardness), lty = 2)
+lines(density(df1$Hardness, k = 'rectangular'))
+
+df.norm = rnorm(1000, mean(df1$Hardness), sd(df1$Hardness))
+head(df.norm)
+
+hist(df1$Hardness, freq = F, col = 'green')
+lines(density(df.norm))
+
+hist(df.norm, freq = F, border = 'red',col = 'yellow', main = 'Comparing two distributions', xlab = 'Data2 size classes')
+lines(density(df1$Hardness), lwd = 2)
+
+hist(df.norm, freq = F, col = 'green')
+lines(density(df1$Hardness))
+
+qqnorm(df1$Hardness)
+qqnorm(df1$Hardness, main = 'QQ plot of example data', xlab = 'Theoretical', ylab = 'Quantiles for data')
+qqline(df1$Hardness, lwd = 2, lty = 2)
+qqp = qqplot(df1$Hardness, rnorm(50, 5, 2))
+qqp
+abline(lm(qqp$y ~ qqp$x))
+
+```
+
+Testing distribution:
+
+```{r}
+sample(head(df1), size = 4)
+shapiro.test(df1$Hardness)
+
+ks.test(df1$Hardness, 'pnorm', mean = 5, sd = 2)
+ks.test(df1$Hardness, pnorm(20, 5, 2))
+ks.test(df1$Hardness, 'ppois', 5)
+```
+
+T-test:
+
+```{r}
+t.test(df1$Hardness, df1$Solids)
+t.test(df1$Hardness, df1$Solids, var.equal = TRUE)
+t.test(df1$Hardness, mu = 1000)
+t.test(df1$Hardness, mu = 1000, alternative = 'greater')
+```
+
+U-test:
+
+```{r}
+wilcox.test(df1$Hardness, df1$Solids)
+wilcox.test(df1$Chloramines, exact = FALSE)
+wilcox.test(df1$Chloramines, mu = 1000, exact = FALSE, conf.int = TRUE, alt = 'less')
+```
+
+Correlation:
+
+```{r}
+cor(df1$Hardness, df1$Solids)
+cor(df1$Hardness, df1$Solids, method = 'spearman')
+cor(df1$Hardness, df1$Solids, method = 'kendall')
+cor(df1)
+cor(df1$Hardness, df1)
+```
+
+Covariance:
+
+```{r}
+cov(df1$Hardness, df1$Solids)
+cov(df1)
+df1.cv = cov(df1)
+cov2cor(df1.cv)
+```
+
+Correlation hypothesis tests:
+
+```{r}
+cor.test(df1$Hardness, df1$Solids)
+```
+
+Association tests: 
+
+```{r}
+chisq.test(df1)
+chisq.test(df1$Hardness)
+chisq.test(df1, correct = FALSE)
+chisq.test(df1$Hardness, correct = FALSE)
+
+df1.cs = chisq.test(df1$Hardness, p = df1$Solids, rescale.p = TRUE)
+df1.cs
+head(df1.cs$exp)
+names(df1.cs$expected) = row.names(df1)
+head(df1.cs$exp)
+
+df2.cs = chisq.test(df1)
+df2.cs
+names(df2.cs)
+head(df2.cs$resid)
+
+df1[1:2, 4:5]
+chisq.test(df1[1:2, 4:5], correct = FALSE)
+chisq.test(df1[1:2, 4:5], correct = TRUE)
+
+with(df1, chisq.test(Hardness, p = Solids, rescale = T))
+
+chisq.test(df1$Hardness)
+```
+
+Box-whisker plots:
+
+```{r}
+boxplot(df1$Hardness)
+boxplot(df1$Chloramines, df1$Solids)
+
+boxplot(df1$Hardness, df1$Solids, names = c('Hardness', 'Solids'))
+title(xlab = 'Variable', ylab = 'Value')
+
+boxplot(df1$Hardness, df1$Solids, names = c('Hardness', 'Solids'), range = 0, 
+xlab = 'Variable', ylab = 'Value', col = 'blue')
+
+boxplot(df1$Hardness, df1$Solids, df1$Chloramines, names = c('Hardness', 'Solids', 'Chloramines'), range = 0, xlab = 'variable', ylab = 'value', col = 'lightblue')
+```
+
+Scatter plots:
+
+```{r}
+plot(df1$Hardness, df1$Solids, pch = "+")
+
+plot(df1$Hardness, df1$Solids, xlab = 'Hardness', ylab = 'Solids', pch = 18 , cex = 4, col = 'lightblue', xlim = c(0, 3500), ylim = c(0, 3500))
+
+plot(Hardness ~ Solids, data = df1)
+abline(lm(Hardness ~ Solids, data = df1))
+
+plot(Hardness ~ Solids, data = df1)
+abline(lm(Hardness ~ Solids, data = df1), lty = 'dotted', lwd = 2, col = 'red')
+
+plot(Hardness ~ Solids, data = df1, xlab = 'Hardness', ylab = 'Solids', pch = 12, cex = 2, col = 'blue', xlim = c(100, 3200), ylim = c(100, 3200))
+abline(lm(Hardness ~ Solids, data = df1), lty = 'twodash', lwd = 2, col = 'green')
+
+plot(df1$Potability, type = 'l')
+plot(df1$Conductivity, type = 'o')
+
+with(df1, plot(df1$Solids, df1$Trihalomethanes , type = 'c'))
+with(df1[order(df1$Hardness),], plot(sort(df1$Solids), Chloramines, type = 'l'))
+
+plot(df1$Trihalomethanes, type = 'b')
+plot(df1$Turbidity, type = 'b')
+
+```
+
+Multiple correlation plots:
+
+```{r}
+pairs(~ Hardness + Solids + Trihalomethanes + Conductivity, data = df1)
+pairs(~ Sulfate + Organic_carbon + Turbidity, data = df1, col ='lightpink', cex = 2, pch = '*')
+```
+
+Pie charts:
+
+```{r}
+pie(head(df1$Chloramines))
+
+pc = c('gray65', 'blue', 'lightblue', 'yellow', 'lightgreen', 'red')
+pie(head(df1$Hardness), labels = row.names(df1), col = pc, cex = 1.2)
+```
+
+Cleveland dot charts:
+
+```{r}
+dotchart(df1$Hardness)
+dotchart(t(df1$Hardness))
+```
+
+Bar charts:
+
+```{r}
+barplot(df1$Hardness)
+barplot(head(df1$Hardness))
+
+barplot(head(df1$Hardness))  
+title(xlab = 'Variable', ylab = 'Value')
+
+barplot(head(df1$Solids), xlab = 'variable', ylab = 'value', ylim = c(0,1000), col = 'lightblue')
+abline(h = seq(1, 7, 10), lty = 2, lwd = 0.5, col = 'gray40')
+box()
+
+barplot(table(head(df1$Hardness)), ylab = 'Variable', xlab = 'Value')
+abline(h = 0)
+
+barplot(head(df1$Hardness), beside = TRUE, ylab = 'Variable', xlab = 'Value')
+
+barplot(t(head(df1$Hardness)), beside = TRUE, legend = TRUE, cex.names = 0.8, col = c('black', 'pink', 'lightblue', 'tan', 'red', 'brown'))
+title(ylab = 'Variable', xlab = 'Value')
+
+bccol = c('black', 'pink', 'lightblue', 'tan', 'red', 'brown')
+barplot(head(df1$Hardness), beside = TRUE, legend = TRUE, horiz = TRUE, xlim = c(0, 60), col = bccol)
+title(ylab = 'Variable', xlab = 'value')
+```
+
+Analysis of variance (ANOVA):
+
+```{r}
+dfs.aov = aov(df1$Hardness ~ df1$Solids, data = df1)
+head(dfs.aov)
+
+summary(dfs.aov)
+
+model.tables(dfs.aov, type = 'effects')
+model.tables(dfs.aov, type = 'means')
+
+pw.aov = aov(df1$Hardness ~ df1$Solids + df1$Chloramines, data = df1)
+pw.aov
+pw.aov = aov(df1$Hardness ~ df1$Solids * df1$Chloramines, data = df1)
+pw.aov
+
+pw.aov = aov(df1$Hardness ~ df1$Solids + df1$Chloramines + df1$Solids : df1$Chloramines, data = df1)
+pw.aov
+
+summary(pw.aov)
+```
+
+Interaction plots:
+
+```{r}
+interaction.plot(head(df1$Hardness), head(df1$Solids), head(df1$Chloramines))
+interaction.plot(df1$Solids, df1$Hardness, df1$Chloramines)
+
+attach(df1)
+interaction.plot(df1$Solids, df1$Hardness, df1$Chloramines, type = 'b')
+detach(df1)
+
+interaction.plot(df1$Solids, df1$Hardness, df1$Chloramines, type = 'b', pch = 3:1)
+
+interaction.plot(df1$Solids, df1$Hardness, df1$Chloramines, type = 'b', pch = 3:1, lty = 3:1)
+
+interaction.plot(df1$Solids, df1$Hardness, df1$Chloramines, type = 'b', pch = 3:1, lty = 3:1, col = c('red', 'blue', 'darkgreen'))
+
+interaction.plot(df1$Solids, df1$Hardness, df1$Chloramines, type = 'b', pch = 3:1, fun = median)
+ 
+interaction.plot(df1$Solids, df1$Hardness, df1$Chloramines, type = 'b', pch = 3:1, xlab = 'Variable', ylab = 'Value', main = 'Interaction plot')
+```
+
+
+```{r}
+a.df = data.frame(df1$Hardness, df1$Solids)
+head(a.df)
+```
+
+Summarize using a grouping variable:
+
+```{r}
+head(aggregate(df1[1:5], by = list(df1$Hardness), FUN = sum))
+
+head(aggregate(df1$Conductivity ~ df1$Turbidity, data = df1, FUN = mean))
+
+head(aggregate(cbind(df1$Trihalomethanes, df1$Sulfate) ~ df1$Organic_carbon, data = df1, FUN = mean))
+
+head(aggregate(. ~ df1$Chloramines, data = df1, FUN = mean))
+
+pw.agg = aggregate(df1$Organic_carbon ~ df1$Sulfate * df1$Trihalomethanes * df1$Turbidity, data = df1, FUN = mean)
+head(pw.agg)
+
+head(aggregate(df1$Conductivity ~ . , data = df1, FUN = mean))
+
+aggregate(df1$Turbidity ~ 1 , data = df1, FUN = mean)
+```
+
+Curvilinear regression:
+
+```{r}
+lm(Hardness ~ Solids, data = df1)
+
+a.lm = lm(Hardness ~ Solids, data = df1)
+a.lm
+
+summary(a.lm)
+
+a.lm$rank
+
+coef(a.lm)
+
+confint(a.lm)
+
+confint(a.lm, parm = c('(Intercept)', 'Solids'), level = 0.9)
+
+head(fitted(a.lm))
+
+head(residuals(a.lm))
+
+formula(a.lm)
+
+a.lm$call
+
+plot(df1$Hardness, df1$Solids)
+plot(~ Hardness + Solids, data = df1)
+plot(Hardness ~ Solids, data = df1)
+plot(formula(df1), data = df1)
+
+abline(lm(Hardness ~ Solids, data = df1))
+abline(a = coef(a.lm[1], b = coef(a.lm[2])))
+abline(coef(a.lm))
+
+anova(a.lm)
+
+mf.lm = lm(Hardness ~ Solids, data = df1)
+mf.lm
+
+pb.lm = lm(Chloramines ~ Sulfate, data = df1)
+pb.lm
+
+mf.lm = lm(Hardness ~ 1, data = df1)
+pb.lm = lm(Chloramines ~ 1, data = df1)
+
+add1(mf.lm, scope = df1)
+
+mf.lm = lm(Hardness ~ Solids, data = df1)
+add1(mf.lm, scope = df1)
+
+mf.lm = lm(Hardness ~ Solids + Chloramines, data = df1)
+summary(mf.lm)
+
+mf.lm = lm(Hardness ~ Solids, data = df1)
+add1(mf.lm, scope = df1, test = 'F')
+
+mf.lm1 = lm(Hardness ~ Solids, data = df1)
+mf.lm2 = lm(Hardness ~ ., data = df1)
+anova(mf.lm1, mf.lm2)
+
+pg.lm = lm(Hardness ~ log(Solids), data = df1)
+summary(pg.lm)
+
+bbel.lm = lm(Chloramines ~ Sulfate + I(Sulfate^2), data = df1)
+
+plot(Hardness ~ Solids, data = df1)
+plot(Chloramines ~ Sulfate, data = df1)
+
+lines(df1$Hardness, fitted(pg.lm))
+lines(df1$Sulfate, fitted(bbel.lm))
+
+head(predict(mf.lm, interval = 'confidence'))
+```
+
+
+```{r}
+prd = predict(mf.lm, interval = 'confidence', level = 0.95)
+
+attach(df1)
+prd = data.frame(prd, df1)
+detach(df1)
+
+prd = data.frame(prd)
+prd$df1 = df1$df1
+head(prd)
+
+plot(Hardness ~ Solids, data = df1)
+lines(prd$Solids, prd$fit) # also best fit
+lines(prd$Solids, prd$lwr, lty = 2) # lower CI
+lines(prd$Solids, prd$upr, lty = 2) # upper CI
+```
+
+
+```{r}
+mf.lm = lm(Hardness ~ Solids + Chloramines, data = df1)
+plot(mf.lm)
+```
+
+
+```{r}
+bf.m = apply(df1, 2, mean, na.rm = TRUE)
+head(bf.m)
+
+bf.sd = apply(df1, 2, sd, na.rm = TRUE)
+
+bf.s = apply(df1, 2, sum, na.rm = TRUE)
+
+bf.l = bf.s / bf.m
+
+bf.se = bf.sd / sqrt(bf.l)
+
+bf.m + bf.se
+
+max(bf.m + bf.se)
+
+bf.max = round(max(bf.m + bf.se) + 0.5, 0)
+bf.max
+
+bp = barplot(bf.m, ylim = c(0, bf.max))
+bp
+
+bp = barplot(bf.m, ylim = c(0, bf.max))
+segments(bp, bf.m + bf.se, bp, bf.m - bf.se)
+box()
+title(xlab = 'Variable', ylab = 'Value')
+abline(h = seq(2, 10, 2), lty = 2, col = 'lightblue')
+```
+
+Simple math:
+
+```{r}
+sin(head(data$Hardness))
+factorial(head(data$Hardness))
+cos(head(data$Hardness))
+abs(head(data$Hardness))
+sqrt(head(data$Hardness))
+tan(head(data$Hardness))
+asin(head(data$Hardness))
+```
+
+Bar Graphs Using ggplot() with geom_col()
+
+```{r}
+library(gcookbook)
+library(dplyr)
+library(ggplot2)
+ggplot(df1, aes(x = Potability , y = Trihalomethanes )) + geom_col()
+
+ggplot(df1, aes(x = Potability , y = Trihalomethanes )) + geom_col(fill = "black", colour = "blue")
+
+ggplot(df1, aes(x = Potability , y = Trihalomethanes , fill = Hardness)) + geom_col(position = "dodge")
+
+#ggplot(df1, aes(x = Potability , y = Trihalomethanes , fill = Hardness)) + geom_col(position = "dodge", colour = "black") + scale_fill_brewer(palette = 'green')
+```
+
+Bar Graphs Using ggplot() with geom_bar()
+
+```{r}
+ggplot(df1, aes(x = Potability)) + geom_bar()
+```
+
+Using Colors in a Bar Graph:
+
+```{r}
+d1 <- df1 %>% arrange(desc(Solids)) %>% slice(1:10)
+d1
+
+ggplot(d1, aes(x = Hardness, y = Chloramines, fill = Solids)) + geom_col()
+```
+
+Adjusting Bar Width and Spacing:
+
+```{r}
+# For narrower bars:
+ggplot(df1, aes(x = Potability , y = Trihalomethanes)) + geom_col(width = 0.5)
+
+# For Wider bars:
+ggplot(df1, aes(x = Potability , y = Trihalomethanes)) + geom_col(width = 1)
+
+# For a grouped bar graph with narrow bars:
+ggplot(df1, aes(x = Potability , y = Trihalomethanes , fill = Hardness)) + geom_col(width = 0.5, position = "dodge")
+
+ggplot(df1, aes(x = Potability , y = Trihalomethanes , fill = Hardness)) + geom_col(width = 0.5, position = position_dodge(0.7))
+```
+
+Stacked Graph:
+
+```{r}
+ggplot(df1, aes(x = Potability , y = Trihalomethanes , fill = Hardness)) + geom_col() + guides(fill = guide_legend(reverse = TRUE))
+
+ggplot(df1, aes(x = Potability , y = Trihalomethanes , fill = Hardness)) + geom_col(position = position_stack(reverse = TRUE)) + guides(fill = guide_legend(reverse = TRUE))
+
+ggplot(df1, aes(x = Potability , y = Trihalomethanes , fill = Hardness)) + geom_col(position = "fill") + scale_y_continuous(labels = scales::percent)
+
+# Using group_by() command:
+a1 <- df1 %>% group_by(Hardness) %>% mutate(new_solids = Solids / sum (Solids) * 100)
+head(a1)
+
+ggplot(a1, aes(x = Hardness, y = Solids, fill = Potability)) + geom_col()
+```
+
+Adding Labels to a Bar Graph:
+
+```{r}
+# Below the top
+ggplot(df1, aes(x = interaction(Potability, Solids), y = Hardness )) + geom_col() + geom_text(aes(label = Hardness), vjust = 1.5, colour = "lightblue")
+
+# Above the top
+ggplot(df1, aes(x = interaction(Potability, Solids), y = Hardness )) + geom_col() + geom_text(aes(label = Hardness), vjust = -0.2, colour = "lightblue")
+
+```
+
